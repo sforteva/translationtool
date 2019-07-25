@@ -49,7 +49,7 @@ The functions below will provide you some basic support to deal with the inconve
 
 
 ## Create MOC folder structure
-
+~~~
 Please use the simple functin ''createMocFolders'' to create a consistent folder structure.
 
 :![ Download createMocFolders.R](media/createMocFolders.R>)
@@ -555,7 +555,7 @@ For example if you need the raw command line call for the ''io_gdal 0'' algorith
 sagaModuleCmd("io_gdal","0")
 
 [1] "saga_cmd io_gdal 0 [-GRIDS `<str>`] [-FILES `<str>`] [-TRANSFORM `<str>`] [-INTERPOL `<str>`]"
-
+~~~
 
 
 
