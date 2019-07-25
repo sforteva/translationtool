@@ -150,34 +150,34 @@ Please use the simple functin ''createMocFolders'' to create a consistent folder
 
 createMocFolders<- function(filepath_git,csess=15,ccourse="gi", moc=TRUE) {
 
-    # switch backslash to slash and expand path to full path
-    filepath_git<-gsub("\\\\", "/", path.expand(filepath_git))
+  # switch backslash to slash and expand path to full path
+  filepath_git<-gsub("\\\\", "/", path.expand(filepath_git))
 
-    # check  tailing / and if not existing append
-    if (substr(filepath_git,nchar(filepath_git)-1,nchar(filepath_git)) != "/") {
+  # check  tailing / and if not existing append
+  if (substr(filepath_git,nchar(filepath_git)-1,nchar(filepath_git)) != "/") {
     filepath_git<-paste0(filepath_git,"/")
-    }
+  }
 
-    ### moc = FALSE feel free to adapt
-    default_folders<- c(paste0(filepath_git,"src/"),
+  ### moc = FALSE feel free to adapt
+  default_folders<- c(paste0(filepath_git,"src/"),
                       paste0(filepath_git,"src/fun/"),
                       paste0(filepath_git,"data/input/"),
                       paste0(filepath_git,"data/output/"),
                       paste0(filepath_git,"control/log/"),
                       paste0(filepath_git,"run/"))
 
-    ### moc=TRUE
-    # script and function folder for each course session can be adapted
-    session_working_folder<-c("/scripts/", "/rmds/")
-    # currently implemented data folders can be adapted
-    data_working_folder<-list(list("aerial/","aerial_merged/","aerial_croped/","RData/","temp/","run/","input/"),
+  ### moc=TRUE
+  # script and function folder for each course session can be adapted
+  session_working_folder<-c("/scripts/", "/rmds/")
+  # currently implemented data folders can be adapted
+  data_working_folder<-list(list("aerial/","aerial_merged/","aerial_croped/","RData/","temp/","run/","input/"),
                             list("RData/","temp/","run/","input/","output/"),
                             list("csv/","raw/"))
 
-    if (moc) {
+  if (moc) {
     # static course structure - better keep the below folders
     proj_root_git<-c(path.expand(filepath_git))
-    proj_root_data<-paste0(substr(proj_root_git,1,gregexpr(pattern ='/',proj_root_git)[1](1)[as.numeric(lengths(gregexpr(pattern ='/',proj_root_git))[1](1)-2)]),"data/")
+    proj_root_data<-paste0(substr(proj_root_git,1,gregexpr(pattern ='/',proj_root_git)[[1]][as.numeric(lengths(gregexpr(pattern ='/',proj_root_git))[[1]]-2)]),"data/")
     sub_root<-c("remote_sensing/","gis/","data_analysis/")
     session_ID<-c("rs-ws-","gi-ws-","da-ws-")
 
@@ -211,19 +211,19 @@ createMocFolders<- function(filepath_git,csess=15,ccourse="gi", moc=TRUE) {
     # data structure NOTE it is outside the proj_root_git folder
     for (i in 1:length(proj_root_data)){
       for (j in 1:length(sub_root)) {
-        for (k in 1:length(data_working_folder[j](j))) {
-          if (ccourse==substr(session_ID[j],1,2) && data_working_folder[j](j)[k]=="run/"){
+        for (k in 1:length(data_working_folder[[j]])) {
+          if (ccourse==substr(session_ID[j],1,2) && data_working_folder[[j]][k]=="run/"){
           }
-          if (!file.exists(file.path(paste0(proj_root_data[i],sub_root[j],data_working_folder[j](j)[k])))) {
-            dir.create(file.path(paste0(proj_root_data[i],sub_root[j],data_working_folder[j](j)[k])), recursive = TRUE)
+          if (!file.exists(file.path(paste0(proj_root_data[i],sub_root[j],data_working_folder[[j]][k])))) {
+            dir.create(file.path(paste0(proj_root_data[i],sub_root[j],data_working_folder[[j]][k])), recursive = TRUE)
 
           }
         }
       }
     }
-    } # end of moc=TRUE
-    # create a default project structure
-    else {
+  } # end of moc=TRUE
+  # create a default project structure
+  else {
     # create directories if needed
     path_temp<-paste0(filepath_git,"run/")
     for(folder in default_folders){
@@ -231,10 +231,10 @@ createMocFolders<- function(filepath_git,csess=15,ccourse="gi", moc=TRUE) {
         dir.create(file.path(folder), recursive = TRUE)
       }
     }
-    }
+  }
 }
 
-`</file>`
+
 
 ## Function getSessionPathes.R
 
@@ -328,26 +328,26 @@ The better way is to use the ''assign'' function. the below script is providing 
 
 getSessionPathes<- function(filepath_git,sessNo=1,courseCode="gi") {
 
-    # switch backslash to slash and expand path to full path
-    filepath_git<-gsub("\\\\", "/", path.expand(filepath_git))
+  # switch backslash to slash and expand path to full path
+  filepath_git<-gsub("\\\\", "/", path.expand(filepath_git))
 
-    # check  tailing / and if not existing append
-    if (substr(filepath_git,nchar(filepath_git)-1,nchar(filepath_git)) != "/") {
+  # check  tailing / and if not existing append
+  if (substr(filepath_git,nchar(filepath_git)-1,nchar(filepath_git)) != "/") {
     filepath_git<-paste0(filepath_git,"/")
-    }
+  }
 
 
-    # script and function folder for each course session can be adapted
-    session_working_folder<-c("/scripts/", "/rmds/")
-    # currently implemented data folders can be adapted
-    data_working_folder<-list(list("aerial/","aerial_merged/","aerial_croped/","RData/","temp/","run/","input/"),
+  # script and function folder for each course session can be adapted
+  session_working_folder<-c("/scripts/", "/rmds/")
+  # currently implemented data folders can be adapted
+  data_working_folder<-list(list("aerial/","aerial_merged/","aerial_croped/","RData/","temp/","run/","input/"),
                             list("RData/","temp/","run/","input/","output/"),
                             list("csv/","raw/"))
 
 
     # static course structure - better keep the below folders
     proj_root_git<-c(path.expand(filepath_git))
-    proj_root_data<-paste0(substr(proj_root_git,1,gregexpr(pattern ='/',proj_root_git)[1](1)[as.numeric(lengths(gregexpr(pattern ='/',proj_root_git))[1](1)-2)]),"data/")
+    proj_root_data<-paste0(substr(proj_root_git,1,gregexpr(pattern ='/',proj_root_git)[[1]][as.numeric(lengths(gregexpr(pattern ='/',proj_root_git))[[1]]-2)]),"data/")
 
     if (courseCode == "rs") {
     sub_root<-c("remote_sensing/")
@@ -391,16 +391,16 @@ getSessionPathes<- function(filepath_git,sessNo=1,courseCode="gi") {
     # data structure NOTE it is outside the proj_root_git folder
     for (i in 1:length(proj_root_data)){
       for (j in 1:length(sub_root)) {
-        for (k in 1:length(data_working_folder[j](j))) {
-          name<-paste0("pd_",substr(session_ID[j],1,2),"_",as.character(gsub("/", "",data_working_folder[j](j)[k])))
-          value<- paste0(proj_root_data[i],sub_root[j],data_working_folder[j](j)[k])
+        for (k in 1:length(data_working_folder[[j]])) {
+          name<-paste0("pd_",substr(session_ID[j],1,2),"_",as.character(gsub("/", "",data_working_folder[[j]][k])))
+          value<- paste0(proj_root_data[i],sub_root[j],data_working_folder[[j]][k])
            makGlobalVar(name, value)
-          if (courseCode==substr(session_ID[j],1,2) && data_working_folder[j](j)[k]=="run/"){
+          if (courseCode==substr(session_ID[j],1,2) && data_working_folder[[j]][k]=="run/"){
             path_temp<- value
           }
         }
       }
-    } # end of moc=TRUE
+  } # end of moc=TRUE
 
 }
 
@@ -410,13 +410,13 @@ getSessionPathes<- function(filepath_git,sessNo=1,courseCode="gi") {
 #
 
 makGlobalVar <- function(name,value) {
-    if(!exists(name, envir = .GlobalEnv)) {
+  if(!exists(name, envir = .GlobalEnv)) {
     assign(name, value, envir = .GlobalEnv, inherits = TRUE)
-    } else {
+  } else {
     warning(paste0("The variable '", name,"' already exist in .GlobalEnv"))
-    }
+  }
 }
-`</file>`
+
 
 ## Function sagaModuleHelp
 
@@ -442,17 +442,17 @@ The function ''sagaModuleHelp'' returns the command line help for the addressed 
 #'
 
 sagaModuleHelp<- function(module,algorithm=NULL) {
-    options(warn=-1)
-    if (!is.null(algorithm)){
+  options(warn=-1)
+  if (!is.null(algorithm)){
     info<- system2('saga_cmd',paste(module,algorithm),stderr = TRUE)
-    } else{
+  } else{
     info<-system2("saga_cmd",paste(module),stderr = TRUE)
-    }
-    options(warn=0)
-    return(info)
+  }
+  options(warn=0)
+  return(info)
 }
 
-`</file>`
+
 
 For example if you want to know how to integrate the ''io_gdal'' module you can do this from R by using the '' sagaModuleHelp'' function as follows.
 
@@ -535,15 +535,15 @@ The function ''sagaModuleCmd'' returns the raw command line for the addressed mo
 
 
 sagaModuleCmd<- function(module,algorithm) {
-    options(warn=-1)
-    t<- sagaModuleHelp(module,algorithm)
-    options(warn=0)
-    cmd<- unique (grep(paste("Usage:",collapse="|"), t, value=TRUE))
-    cmd<- substr(cmd, which(strsplit(cmd, '')[1](1)==':')+2, nchar(cmd))
-    return(cmd)
+  options(warn=-1)
+  t<- sagaModuleHelp(module,algorithm)
+  options(warn=0)
+  cmd<- unique (grep(paste("Usage:",collapse="|"), t, value=TRUE))
+  cmd<- substr(cmd, which(strsplit(cmd, '')[[1]]==':')+2, nchar(cmd))
+  return(cmd)
 }
 
-`</file>`
+
 For example if you need the raw command line call for the ''io_gdal 0'' algorithm you can do this from R by using the '' sagaModuleCmd'' function as follows.
 
 	

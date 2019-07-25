@@ -4,6 +4,8 @@ If you want to avoid return to launch actions of the Solo during mission tasks y
 
 
 ---
+Please be **very very** careful. The below changes bypass some central safety issues of the UAV. Please read all additional information. the settings are tested for the Solo only! Take care and reset them for **normal** flight modes/note
+---
 
 
 ##  Geofence
@@ -14,11 +16,11 @@ For mission flights in ''AUTO'' mode you should deactivate it.
 
 
 Please find more information at [Geofence ](http://ardupilot.org/copter/docs/ac2_simple_geofence.html).
-##  Failsafe Actions
+## Failsafe Actions
 
 There are several failsafe mechanisms to ease vehicle recovery/prevent wandering in the event that vehicle control is lost. The following are crucial for mission tasks.
 
-###  Ground Control Station failsave
+### Ground Control Station failsave
 
 The Ground Control Station  ''GCS'' failsafe controls how copter will behave if contact with the GCS is lost. Depending on the setting and vehicle position the failsafe will either RTL/LAND, or continue an active mission.You need the latter.
 
@@ -26,7 +28,7 @@ Set the ''FS_GCS_ENABLE''  parameter to ''Enabled Continue with Mission in Auto 
 
 Please find more information at [GCS Failsafe](http://ardupilot.org/copter/docs/gcs-failsafe.html?highlight=failsafe#gcs-failsafe).
 
-###  Radio Failsafe
+### Radio Failsafe
 
 Copter supports Return-To-Launch in cases where contact between the Pilot’s RC transmitter and the flight controller’s receiver is lost. Note the ''Radio failsafe'' is also called ''Throttle failsafe''.
 
@@ -35,7 +37,7 @@ Set the ''FS_THR_ENABLE'' parameter to ''Enabled Continue with Mission in Auto M
 Please find more information at [RC Failsafe](http://ardupilot.org/copter/docs/radio-failsafe.html#radio-failsafe).
 
 
-###  Battery Failsafe
+### Battery Failsafe
 
 The battery failsafe can be set-up to automatically trigger an RTL or LAND when the vehicle battery voltage or estimated remaining power has crossed a configurable threshold.
 
@@ -43,7 +45,8 @@ Set the ''FS_BATT_ENABLE'' to ''RTL''.
 
 Please find more information at [Battery Failsafe](http://ardupilot.org/copter/docs/failsafe-battery.html).
 
- `<note important>`The below Solo parameter file comes with ABSOLUTELY NO  GUARANTEE. Please check it! You may copy and save it as an common ASCII file. You can upload it to the Solo flight controller using e.g. the ''Tower'' App.
+---
+The below Solo parameter file comes with ABSOLUTELY NO  GUARANTEE. Please check it! You may copy and save it as an common ASCII file. You can upload it to the Solo flight controller using e.g. the ''Tower'' App.
 
 ** Please calibrate the Solo sensors after uploading the new parameters to avoid strange behaviors**
 
