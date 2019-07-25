@@ -13,35 +13,29 @@ If we do not create a R package, the following workflow of parsing files contain
 
 Assuming we already have a project and script folder to source it may look like the following snippet.
 
-
-
-### START snippet head of main script
-
-# define your github personal folder as project root directory
-
-filepath_git<-"~/lehre/msc/active/msc-2016/myGithubName/"
-
-# source the setPathGlobal function assumed to be in an already existing "fun" folder
-
-source('~/lehre/msc/active/msc-2016/myGithubName/fun/setPathGlobal.R')
-
-# call the setPathGlobal function
-
-setPathGlobal(filepath_git)
-
-# you can source all existing functions
-
-# first generate a list of all files you want to source
-sourceFileNames <- list.files(pattern="[.]R$", path=paste0(filepath_git,"/fun"), full.names=TRUE)
-
-# source them all
-
-sapply(sourceFileNames, FUN=source)
-
-# now we can write our main or control script
-
-### END snippet head of main script
-
+	
+	
+	### START snippet head of main script
+	
+	# define your github personal folder as project root directory
+	filepath_git<-"~/lehre/msc/active/msc-2016/myGithubName/"
+	
+	# source the setPathGlobal function assumed to be in an already existing "fun" folder
+	source('~/lehre/msc/active/msc-2016/myGithubName/fun/setPathGlobal.R')
+	
+	# call the setPathGlobal function
+	setPathGlobal(filepath_git)
+	
+	# you can source all existing functions
+	# first generate a list of all files you want to source
+	sourceFileNames <- list.files(pattern="[.]R$", path=paste0(filepath_git,"/fun"), full.names=TRUE)
+	
+	# source them all
+	sapply(sourceFileNames, FUN=source)
+	
+	# now we can write our main or control script
+	### END snippet head of main script
+	
 
 
 The functions below will provide you some basic support to deal with the inconvenience of the ''SAGA ClI''
@@ -49,7 +43,7 @@ The functions below will provide you some basic support to deal with the inconve
 
 
 ## Create MOC folder structure
-~~~
+
 Please use the simple functin ''createMocFolders'' to create a consistent folder structure.
 
 :![ Download createMocFolders.R](media/createMocFolders.R>)
@@ -462,55 +456,55 @@ sagaModuleHelp<- function(module,algorithm=NULL) {
 
 For example if you want to know how to integrate the ''io_gdal'' module you can do this from R by using the '' sagaModuleHelp'' function as follows.
 
-
-
- sagaModuleHelp("io_gdal","0")
-
-
-
- [1] "Load table: Proj.4-WKT Dictionary..."
- [2] "failed"
- [3] "Load table: Proj.4-WKT Dictionary..."
- [4] "failed"
- [5] "____________________________"
- [6] ""
- [7] "   #####   ##   #####    ##"
- [8] "  ###     ###  ##       ###"
- [9] "   ###   # ## ##  #### # ##"
-[10] "    ### ##### ##    # #####"
-[11] " ##### #   ##  ##### #   ##"
-[12] "____________________________"
-[13] ""
-[14] "SAGA Version: 2.2.2"
-[15] ""
-[16] "____________________________"
-[17] "library path:\t/usr/local/lib/saga/"
-[18] "library name:\tlibio_gdal"
-[19] "library     :\tGDAL/OGR"
-[20] "tool        :\tGDAL: Import Raster"
-[21] "author      :\tO.Conrad (c) 2007 (A.Ringeler)"
-[22] "processors  :\t4 [4]"
-[23] "____________________________"
-[24] ""
-[25] ""
-[26] "Usage: saga_cmd io_gdal 0 [-GRIDS `<str>`] [-FILES `<str>`] [-TRANSFORM `<str>`] [-INTERPOL `<str>`]"
-[27] "  -GRIDS:`<str>`    \tGrids"
-[28] "\tGrid list (output)"
-[29] "  -FILES:`<str>`    \tFiles"
-[30] "\tFile path"
-[31] "  -TRANSFORM:`<str>`\tTransformation"
-[32] "\tBoolean"
-[33] "\tDefault: 1"
-[34] "  -INTERPOL:`<str>` \tInterpolation"
-[35] "\tChoice"
-[36] "\tAvailable Choices:"
-[37] "\t[0] Nearest Neighbor"
-[38] "\t[1] Bilinear Interpolation"
-[39] "\t[2] Inverse Distance Interpolation"
-[40] "\t[3] Bicubic Spline Interpolation"
-[41] "\t[4] B-Spline Interpolation"
-[42] "\tDefault: 4"
-attr(,"status")
+	
+	
+	 sagaModuleHelp("io_gdal","0")
+	
+	
+	
+	 [1] "Load table: Proj.4-WKT Dictionary..."
+	 [2] "failed"
+	 [3] "Load table: Proj.4-WKT Dictionary..."
+	 [4] "failed"
+	 [5] "____________________________"
+	 [6] ""
+	 [7] "   #####   ##   #####    ##"
+	 [8] "  ###     ###  ##       ###"
+	 [9] "   ###   # ## ##  #### # ##"
+	[10] "    ### ##### ##    # #####"
+	[11] " ##### #   ##  ##### #   ##"
+	[12] "____________________________"
+	[13] ""
+	[14] "SAGA Version: 2.2.2"
+	[15] ""
+	[16] "____________________________"
+	[17] "library path:\t/usr/local/lib/saga/"
+	[18] "library name:\tlibio_gdal"
+	[19] "library     :\tGDAL/OGR"
+	[20] "tool        :\tGDAL: Import Raster"
+	[21] "author      :\tO.Conrad (c) 2007 (A.Ringeler)"
+	[22] "processors  :\t4 [4]"
+	[23] "____________________________"
+	[24] ""
+	[25] ""
+	[26] "Usage: saga_cmd io_gdal 0 [-GRIDS `<str>`] [-FILES `<str>`] [-TRANSFORM `<str>`] [-INTERPOL `<str>`]"
+	[27] "  -GRIDS:`<str>`    \tGrids"
+	[28] "\tGrid list (output)"
+	[29] "  -FILES:`<str>`    \tFiles"
+	[30] "\tFile path"
+	[31] "  -TRANSFORM:`<str>`\tTransformation"
+	[32] "\tBoolean"
+	[33] "\tDefault: 1"
+	[34] "  -INTERPOL:`<str>` \tInterpolation"
+	[35] "\tChoice"
+	[36] "\tAvailable Choices:"
+	[37] "\t[0] Nearest Neighbor"
+	[38] "\t[1] Bilinear Interpolation"
+	[39] "\t[2] Inverse Distance Interpolation"
+	[40] "\t[3] Bicubic Spline Interpolation"
+	[41] "\t[4] B-Spline Interpolation"
+	[42] "\tDefault: 4"
+	attr(,"status")
 
 
 
@@ -552,10 +546,11 @@ sagaModuleCmd<- function(module,algorithm) {
 
 For example if you need the raw command line call for the ''io_gdal 0'' algorithm you can do this from R by using the '' sagaModuleCmd'' function as follows.
 
-sagaModuleCmd("io_gdal","0")
+	
+	sagaModuleCmd("io_gdal","0")
+	
+	[1] "saga_cmd io_gdal 0 [-GRIDS `<str>`] [-FILES `<str>`] [-TRANSFORM `<str>`] [-INTERPOL `<str>`]"
 
-[1] "saga_cmd io_gdal 0 [-GRIDS `<str>`] [-FILES `<str>`] [-TRANSFORM `<str>`] [-INTERPOL `<str>`]"
-~~~
 
 
 
