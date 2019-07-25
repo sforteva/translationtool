@@ -90,20 +90,23 @@ class DocuwikiToMarkdownExtra {
 			// Determine if the line mode is changing
 			$tl = trim($line);
 			$tl = preg_replace('!\s+!', ' ', $tl);
-		
+			
 			/* <html> */
 			if (preg_match('/<html>/', $tl)){
 				$line = str_replace("<html><a", "", $line);
 				$lineMode = "href";
 			}
 			/* <note> */
-			else if ($lineMode != "code" && preg_match(' /<note/', $tl)){
-				$line = "---";
+			else if ($lineMode != "code" && preg_match('/<note(|\s([a-zA-Z0-9])*)/', $tl)){
+				$line = $this->convertNoteCode($line);
+				//$line = "---";
 				$lineMode = "code";
 			}
 			/* <file rsplus */
 			else if ( preg_match('/<file(|\s([a-zA-Z0-9])*)/', $tl)) {
 				$line = $this->convertFileCode($line);
+				$line = $line . "\n" . "~~~";
+				$lineMode = "code";
 			}
 			/* <code> und <code *> */
 			else if ($lineMode != "code" && preg_match('/^\<code(|\s([a-zA-Z0-9])*)\>$/U', $tl)) {
@@ -115,21 +118,21 @@ class DocuwikiToMarkdownExtra {
 				$line .= " {" . substr($tl, 6, -1) . "}";
 				$lineMode = "code";
 			}
-			else if ($lineMode == "code" && $tl == "</code>"){
+			else if (($lineMode == "code" && $tl == "</code>")|| ($lineMode == "code" && $tl == "</file>")){
 				$line = "~~~";
 				$lineMode = "text";
 			}
 			/* [[http...]]*/
-			else if ($lineMode == "code" && preg_match('/\[\[http/', $tl)){
+			else if (preg_match('/\[\[http/', $tl)){
 				$line= $this->convertInlineNote($line);	
+				$lineMode = "text";
 			}
-			else if ($lineMode == "code" && $tl == "</note>"){
+			else if ($tl == "</note>"){
 				$line = "---";
 				$lineMode = "text";
 			}
 			else if (($lineMode == "code" && $tl == "</html>") 
-				|| ($lineMode == "code" && $tl == "</a>"))
-			{
+				|| ($lineMode == "code" && $tl == "</a>")){
 				$line = "";
 				$lineMode = "text";
 			}
@@ -208,7 +211,9 @@ class DocuwikiToMarkdownExtra {
 					break;
 			}
 
-			if ($lineMode != "table") $output .= $line . "\n";
+			if ($lineMode != "table") {
+				$output .= $line . "\n";	
+			}
 		}
 		
 		$cleanup = new MarkdownCleanup();
@@ -220,7 +225,22 @@ class DocuwikiToMarkdownExtra {
 
 	static $underline = "";
 
-	/* Convert file rsplus */
+	/* Convert <note ... */
+	function convertNoteCode($line){
+		$resLine="---";
+		$line = str_replace("<", "", $line);
+		$res = explode(">", $line);
+		//var_dump($res);
+		if(count($res) > 1){
+			$resLine .= "\n" . $res[1];
+		}
+		if(count($res) > 2){
+			$resLine .=  "\n" . "---";
+		}
+		return $resLine;
+	}
+		
+	/* Convert <file rsplus */
 	function convertFileCode($line){
 		$resLine="";
 		$res = explode(" ", $line);
