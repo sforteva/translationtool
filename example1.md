@@ -51,8 +51,8 @@ Die von der Sonne emittierte Strahlung verteilt sich auf dem Weg zur Erde auf ei
 
 Wir können also aufgrund des Wien’schen Verschiebungsgesetzes und der Abnahme der Bestrahlungsstärke mit dem Quadrat der Entfernung begründen, warum wir die für die passive Fernerkundung der Landoberfläche und Atmosphäre relevante Strahlung in
 
-      * einen solaren Anteil (< 4 µm) und einen
-      * terrestrichen Anteil (> 3,5 µm)
+        * einen solaren Anteil (< 4 µm) und einen
+        * terrestrichen Anteil (> 3,5 µm)
 
 aufteilen können.
 
