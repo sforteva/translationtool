@@ -3,10 +3,10 @@
 If you want to avoid return to launch actions of the Solo during mission tasks you have to change some parameters of the Solo parameter setup. Basically you have to deal with the ''Geofence'' and the ''Failsafe'' settings while flying the Solo in the ''AUTO'' mode.
 
 
-`<note warning>`Please be **very very** careful. The below changes bypass some central safety issues of the UAV. Please read all additional information. the settings are tested for the Solo only! Take care and reset them for **normal** flight modes`</note>`
+---
 
 
-## Geofence
+##  Geofence
 
 You will find a comprhensive explanation at the embedded help page of ArduPilot. Please  follow the instructions while setting the Geofence.
 
@@ -14,11 +14,11 @@ For mission flights in ''AUTO'' mode you should deactivate it.
 
 
 Please find more information at [Geofence ](http://ardupilot.org/copter/docs/ac2_simple_geofence.html).
-## Failsafe Actions
+##  Failsafe Actions
 
 There are several failsafe mechanisms to ease vehicle recovery/prevent wandering in the event that vehicle control is lost. The following are crucial for mission tasks.
 
-### Ground Control Station failsave
+###  Ground Control Station failsave
 
 The Ground Control Station  ''GCS'' failsafe controls how copter will behave if contact with the GCS is lost. Depending on the setting and vehicle position the failsafe will either RTL/LAND, or continue an active mission.You need the latter.
 
@@ -26,7 +26,7 @@ Set the ''FS_GCS_ENABLE''  parameter to ''Enabled Continue with Mission in Auto 
 
 Please find more information at [GCS Failsafe](http://ardupilot.org/copter/docs/gcs-failsafe.html?highlight=failsafe#gcs-failsafe).
 
-### Radio Failsafe
+###  Radio Failsafe
 
 Copter supports Return-To-Launch in cases where contact between the Pilot’s RC transmitter and the flight controller’s receiver is lost. Note the ''Radio failsafe'' is also called ''Throttle failsafe''.
 
@@ -35,7 +35,7 @@ Set the ''FS_THR_ENABLE'' parameter to ''Enabled Continue with Mission in Auto M
 Please find more information at [RC Failsafe](http://ardupilot.org/copter/docs/radio-failsafe.html#radio-failsafe).
 
 
-### Battery Failsafe
+###  Battery Failsafe
 
 The battery failsafe can be set-up to automatically trigger an RTL or LAND when the vehicle battery voltage or estimated remaining power has crossed a configurable threshold.
 
@@ -47,9 +47,9 @@ Please find more information at [Battery Failsafe](http://ardupilot.org/copter/d
 
 ** Please calibrate the Solo sensors after uploading the new parameters to avoid strange behaviors**
 
-`</note>`
+---
 
-	:::bash
+	
 	#NOTE: 3DR Solo param list for mission flights
 	ACCEL_Z_D , 0.000000
 	ACCEL_Z_FILT_HZ , 20.000000
