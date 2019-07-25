@@ -46,6 +46,8 @@ The functions below will provide you some basic support to deal with the inconve
 
 Please use the simple functin ''createMocFolders'' to create a consistent folder structure.
 
+:![ Download createMocFolders.R](media/createMocFolders.R>)
+
 	
 	# rs-ws-05-1
 	#' @description  MOC - Advanced GIS (T. Nauss, C. Reudenbach)
@@ -213,6 +215,8 @@ The most easiest however the most ugliest way to assign a global variable out of
 The better way is to use the ''assign'' function. the below script is providing two presets. One is providing the course folder and variable structure the other is generating a simple but effective project structure. Feel free to adapt and improve the below script.
 
 
+:![ Download createMocFolders.R](media/setPathGlobal.R>)
+
 	
 	# rs-ws-05-1
 	#' @description  MOC - Advanced GIS (T. Nauss, C. Reudenbach)
@@ -362,6 +366,8 @@ The better way is to use the ''assign'' function. the below script is providing 
 The function ''sagaModuleHelp'' returns the command line help for the addressed module and/or algorithm.
 
 
+:![ Download createMocFolders.R](media/sagaModuleHelp.R>)
+
 	
 	#' sagaModuleHelp
 	#'@description gi-ws-04-1 MOC - Advanced GIS (T. Nauss, C. Reudenbach)
@@ -445,6 +451,8 @@ For example if you want to know how to integrate the ''io_gdal'' module you can 
 ## Function sagaModuleCmd
 
 The function ''sagaModuleCmd'' returns the raw command line for the addressed module and/or algorithm.
+
+:![ Download createMocFolders.R](media/sagaModuleCmd.R>)
 
 	
 	#' sagaModuleCmd
