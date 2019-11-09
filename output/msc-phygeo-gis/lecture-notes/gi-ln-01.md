@@ -1,45 +1,39 @@
-# L01: From reality to abstraction 
+# L03: First think - than act
 
-"If real is what you can feel, smell, taste and see, then 'real' is simply electrical signals interpreted by your brain"
+“I'm trying to free your mind, Neo. But I can only show you the door.
+You're the one that has to walk through it.”
 
 Morpheus, Matrix
 
 ## Things we cover in this session
 
-*  What are basic spatial concepts?
-
-*  The digital representation of spatial concepts
-
-*  What are geographic Informations?
-
-*  What are the basic concepts of geographical localities#?
-
-*  What are geographical and projected Coordinates
-
+  - Some ways to break down the problem in convenient parts
+  - How to construct a common algorithm 
+  - When to keep in line and when to start a new one 
 
 ## Things you need for this session
 
-
-*  Data from [W01-2: LiDAR derived information as raster data](courses/msc/msc-phygeo-remote-sensing/worksheets/rs-ws-01-2)
-
-*  [R01 Spatial thinking needs a scope](courses/msc/msc-phygeo-gis/reader/gi-rd-01)
+  - [W04-1: Planes, plateaus and API
+    calls](/courses/msc/msc-phygeo-gis/worksheets/gi-ws-03-2)
 
 ## Things to take home from this session
 
 At the end of this session you should be able to
 
-*  You will understand how real world can be represented by data
+  - deconstruct problems 
+  - construct solutions
+  - achieve resources
 
-*  You can distinguish between discrete and continuous representation of space
+## From plains and plateaus
 
-*  You will consider the relevance of scales and purposes for a meaningful abstraction of real world
-
-*  You know the basics about data models and their implementation in the world of geoinformation
-
-
+Actually we can assume that we know what we want to focus. The main
+question is now: How can we exactly head on to answer our question?
 
 ## Slides
 
+<iframe src="https://docs.google.com/presentation/d/1r095DLYoF5jEF6ctj8KfE3_EGZzw5P4mbdSy0buMw-4/embed?start=false&loop=false&delayms=3000" frameborder="0" width="768" height="605" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
-<iframe src="https://docs.google.com/presentation/d/1jtXgJcNaaiWerBJfGQPJDcvyawSaPiWcMLk_RTcFUG0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="768" height="605" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
 
+## Until we meet again
+
+Please do the following exercises.
