@@ -41,5 +41,6 @@ At the end of this session you should be able to
 ## Slides
 
 
-<iframe src="https://docs.google.com/presentation/d/1jtXgJcNaaiWerBJfGQPJDcvyawSaPiWcMLk_RTcFUG0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="768" height="605" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+<iframe src="https://docs.google.com/presentation/d/1jtXgJcNaaiWerBJfGQPJDcvyawSaPiWcMLk_RTcFUG0/embed?start=false&loop=false&delayms=3000" frameborder="0" width="768" height="605" allowfullscreen="true">
+</iframe>
 
