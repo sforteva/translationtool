@@ -34,10 +34,12 @@ class DocuwikiToMarkdownExtra {
 		'/^=====([^=]*)=*$/'		=>	array("rewrite" => '## \1'),
 		'/^====== (.*) ======$/'	=>	array("rewrite" => '# \1'),
 		'/^======([^=]*)=*$/'		=>	array("rewrite" => '# \1'),
-
+		'/\<note\>(.*)/'			=>	array("call" => "handleNote"),
+		'/\<note (.*)\>/'			=>	array("call" => "handleNote"),
+		'/\<\/note\>/'				=>	array("rewrite" => '---'),
 		// Link syntaxes, most specific first
-		'/\[\[.*?\|\{\{.*?\}\}\]\]/U' => array("notice" => "Link with image seen, not handled properly"),
-		'/\[\[.*?\#.*?\|.*?\]\]/U'	=>	array("notice" => "Link with segment seen, not handled properly"),
+		'/\[\[.*?\|\{\{.*?\}\}\]\]/U' =>array("call" => "handleLink"),
+		'/\[\[.*?\#.*?\|.*?\]\]/U'	=>	array("call" => "handleLink"),
 		'/\[\[.*?\>.*?\]\]/U'		=>	array("notice" => "interwiki syntax seen, not handled properly"),
 		'/\[\[(.*)\]\]/U'			=>	array("call" => "handleLink"),
 
@@ -78,7 +80,7 @@ class DocuwikiToMarkdownExtra {
 
 		$output = "";
 		$lineMode = "text";
-
+		$lineBash = "";
 		$this->listItemType = "";
 		$this->lineNumber = 0;
 
@@ -89,52 +91,34 @@ class DocuwikiToMarkdownExtra {
 
 			// Determine if the line mode is changing
 			$tl = trim($line);
-			$tl = preg_replace('!\s+!', ' ', $tl);
-			
-			/* <html> */
-			if (preg_match('/<html>/', $tl)){
-				$line = str_replace("<html><a", "", $line);
-				$lineMode = "href";
+		    if (preg_match('/(src="\/\/)/', $tl)){
+				$tl = str_replace('src="//','/src="http://',$tl);
+				//print("*".$tl);
 			}
-			/* <note> */
-			else if ($lineMode != "code" && preg_match('/<note(|\s([a-zA-Z0-9])*)/', $tl)){
-				$line = $this->convertNoteCode($line);
-				//$line = "---";
-				$lineMode = "code";
-			}
-			/* <file rsplus */
-			else if ( preg_match('/<file(|\s([a-zA-Z0-9])*)/', $tl)) {
-				$line = $this->convertFileCode($line);
-				$line = $line . "\n" . "~~~";
-				$lineMode = "code";
-			}
-			/* <code> und <code *> */
-			else if ($lineMode != "code" && preg_match('/^\<code(|\s([a-zA-Z0-9])*)\>$/U', $tl)) {
+			if ($lineMode != "code" && preg_match('/^\<code(|\s([a-zA-Z0-9])*)\>$/U', $tl)) {
 				$line = "~~~";
-				if (($tl != "<code>")&&
-				($tl != "<code rsplus>") &&
-				($tl != "<code python>")&&
-				($tl != "<code bash>"))
-				$line .= " {" . substr($tl, 6, -1) . "}";
+				if (preg_match('/(bash)/', $tl)){
+					$line = "``` bash";
+					$lineBash = 1;
+				} //else if ($tl != "<code>") {
+				else if (preg_match('/(\<code\>)/', $tl)) {
+					$line .= " {" . substr($tl, 6, -1) . "}";
+				}
 				$lineMode = "code";
 			}
-			else if (($lineMode == "code" && $tl == "</code>")|| ($lineMode == "code" && $tl == "</file>")){
+			else if ($lineMode != "code" && preg_match('/(\<file)/', $tl)) {
+				if( preg_match('/(rsplus)/', $tl)){
+					$lineMode = "code";
+					$line = "~~~";
+				}
+			}
+			else if ($lineMode == "code" && ($tl == "</code>"||$tl == "</file>")) {
 				$line = "~~~";
 				$lineMode = "text";
-			}
-			/* [[http...]]*/
-			else if (preg_match('/\[\[http/', $tl)){
-				$line= $this->convertInlineNote($line);	
-				$lineMode = "text";
-			}
-			else if ($tl == "</note>"){
-				$line = "---";
-				$lineMode = "text";
-			}
-			else if (($lineMode == "code" && $tl == "</html>") 
-				|| ($lineMode == "code" && $tl == "</a>")){
-				$line = "";
-				$lineMode = "text";
+				if($lineBash == 1){
+					$line = "```";
+					$lineBash = 0;
+				}
 			}
 			else if ($lineMode == "text" && strlen($tl) > 0 &&
 				($tl[0] == "^" || $tl[0] == "|")) {
@@ -148,11 +132,16 @@ class DocuwikiToMarkdownExtra {
 				($tl[0] != "^" && $tl[0] != "|"))) {
 				$lineMode = "text";
 			}
-
+			else if ($lineMode == "text" && preg_match('/(\<html\>)/', $tl)) {
+				$lineMode = "html";
+			}
+			else if ($lineMode == "html" && preg_match('/[\/html]/', $tl)) {
+				$lineMode = "text";
+			}
 			if ($prevLineMode == "table" && $lineMode != "table") {
 				$output .= $this->renderTable($table);
 			}
-			$temp = "";
+
 			// perform mode-specific translations
 			switch ($lineMode) {
 				case "text":
@@ -161,7 +150,8 @@ class DocuwikiToMarkdownExtra {
 					break;
 				case "code":
 					break;
-				case "link":;
+				case "html":
+					$line = $tl;
 					break;
 				case "table":
 					// Grab this line, break it up and add it to $table after
@@ -171,49 +161,8 @@ class DocuwikiToMarkdownExtra {
 						$parts[$i] = trim($parts[$i]);
 					$table[] = $parts;
 					break;
-				case "href":
-					$line = str_replace("</a>", "", $line);
-					$line = str_replace("img", "", $line);
-					$line = str_replace("</html>", "", $line);
-					$res = explode("><", $line);
-					$http = "";
-					$title = "";
-					$src = "";
-					for ($i=0; $i< count($res); $i++){
-						
-						if(stristr($res[$i], 'http') == TRUE) {
-							$resHttpTitle = explode("=", $res[$i]);
-							for ($j=0; $j< count($resHttpTitle); $j++){
-								if(stristr($resHttpTitle[$j], 'title') == TRUE) {
-									$title .= "title=". $resHttpTitle[$j+1]."";
-									$title = str_replace("href","",$title);
-								} if(stristr($resHttpTitle[$j], 'http') == TRUE) {
-									$http = $resHttpTitle[$j];
-								}
-							}
-						}
-					}
-					$res2 = explode(" ", $line);
-					for ($i=0; $i< count($res2); $i++){
-						if(stristr($res2[$i], 'src') == TRUE) {
-							$resSrc = explode("=", $res2[$i]);
-							//var_dump($resSrc);
-							$src = str_replace("/>","",$resSrc[1]);
-							$src = str_replace("\"","",$src);
-						}
-					}
-									
-					$line = "![" . $http . " " . $title . "](" . $src . ")";
-					$line = str_replace("height", "", $line);
-					$line = str_replace("width", "", $line);
-					$line = str_replace("alt", "", $line);
-					$lineMode="text";
-					break;
 			}
-
-			if ($lineMode != "table") {
-				$output .= $line . "\n";	
-			}
+			if ($lineMode != "table") $output .= $line . "\n";
 		}
 		
 		$cleanup = new MarkdownCleanup();
@@ -225,49 +174,6 @@ class DocuwikiToMarkdownExtra {
 
 	static $underline = "";
 
-	/* Convert <note ... */
-	function convertNoteCode($line){
-		$resLine="---";
-		$line = str_replace("<", "", $line);
-		$res = explode(">", $line);
-		//var_dump($res);
-		if(count($res) > 1){
-			$resLine .= "\n" . $res[1];
-		}
-		if(count($res) > 2){
-			$resLine .=  "\n" . "---";
-		}
-		return $resLine;
-	}
-		
-	/* Convert <file rsplus */
-	function convertFileCode($line){
-		$resLine="";
-		$res = explode(" ", $line);
-		$resLine = ":![ Download createMocFolders.R](media/" . $res[2] .")";
-		return $resLine;
-	}
-	
-	/* Convert inline code <note> special with [[http... */
-	function convertInlineNote($line){
-		$resLine = "";
-		$res1 = explode("[[", $line);
-		$resLine .= $res1[0];
-		for ($i=0; $i<count($res1); $i++){
-			if(stristr($res1[$i], 'http') == TRUE) {
-				$res2 = explode("]]", $res1[$i]);
-				$tempRes2 = explode("|", $res2[0]);
-
-				$resLine .= "[" . $tempRes2[1] ."]";
-				$resLine .= "(" . $tempRes2[0] .")";
-				$resLine .= $res2[1];
-			}
-		}
-		//echo $resLine;
-		return $resLine;
-	}
-	
-	
 	function renderTable($table) {
 		// get a very big underline
 		if (!self::$underline) for ($i = 0; $i < 100; $i++) self::$underline .= "----------";
@@ -325,7 +231,11 @@ class DocuwikiToMarkdownExtra {
 	// __-			[ordered list item] =>
 	// Doesn't handle nested lists, but will emit a notice.
 	function convertListItems($s) {
-		if ($s == "") return $s;
+		
+		$t = trim($s);
+		$t = str_replace(" ", "", $t);
+		
+		if ($t == "") return "";
 
 		if (substr($s, 0, 2) != "  " && $s[0] != "\t" && trim($s) != "") {
 			// Termination condition for a list is that the text is not
@@ -351,8 +261,7 @@ class DocuwikiToMarkdownExtra {
 		else if (substr($s, 0, 3) == "   ") {
 			$t = trim($s);
 			if ($t && ($t[0] == "*" || $t[0] == "-")){
-				$s = "  " . $s;
-				//$this->notice("Possible nested indent, * which isn't handled");
+				//$this->notice("Possible nested indent, which isn't handled");
 			}
 		}
 		else if (substr($s, 0, 2) == "  ") {
@@ -364,6 +273,18 @@ class DocuwikiToMarkdownExtra {
 		}
 
 		return $s;
+	}
+	
+	// Called by a rule that match notes with text 
+	// some variants:
+	// <note> ** text
+	// <note important> ** text
+	function handleNote($line, $matchArgs) {
+		$parts = explode(">", $line);
+		if(strlen($parts[1])> 1) {
+			$line = "--- \n ".$parts[1];
+		} else $line = "---";
+		return $line;
 	}
 
 	// Called by a rule that match links with [[ ]]. $line is the line to munge.
@@ -389,20 +310,30 @@ class DocuwikiToMarkdownExtra {
 	// - [[community run third party websites]]
 	// - [[requirements#including_inside_template_files|Includes in Templates]]
 	function handleLink($line, $matchArgs) {
+
 		foreach ($matchArgs[0] as $match) {
 			$link = substr($match, 2, -2);
-			$parts = explode("|", $link);
+			if(stristr($link, "|")) {
+				$parts = explode("|", $link);
 
-			if (count($parts) == 1) $replacement = "[" . $parts[0] . "](" . $this->translateInternalLink($parts[0]) . ")";
+			}
+			else if(strpos($link, " ")) {
+				$temp = explode(" ", $link);
+				$parts[0] = $temp[0];
+				$parts[1] = substr($link,strpos($link, " "), strlen($link)-1);
+			}
+			if (count($parts) == 1) 
+			{
+				$replacement = "[" . $parts[0] . "](" . $this->translateInternalLink($parts[0]) . ")";		
+			}
 			else {
 				if (strpos($parts[1], "{{")) $this->notice("Image inside link not translated, requires manual editing");
 				$replacement = "[" . $parts[1] . "](" . $this->translateInternalLink($parts[0]) . ")";
 			}
-
 			$line = str_replace($match, $replacement, $line);
 		}
-
 		return $line;
+		
 	}
 
 	// Called by rules that match image references with {{ }}
@@ -412,6 +343,7 @@ class DocuwikiToMarkdownExtra {
 	// - {{http://something/file.png|display}}
 	// - {{tutorial:file.png}}
 	function handleImage($line, $matchArgs) {
+						
 		foreach ($matchArgs[0] as $match) {
 			$link == substr($match, 2, -2);
 			$parts = explode("|", $link);
